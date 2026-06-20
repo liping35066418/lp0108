@@ -5,6 +5,7 @@ export interface FoodItem {
   name: string;
   category: FoodCategory;
   price: number;
+  weight: number;
   emoji: string;
   description: string;
 }
@@ -16,6 +17,11 @@ export interface CategoryLimit {
 }
 
 export interface PriceLimit {
+  min: number;
+  max: number;
+}
+
+export interface WeightLimit {
   min: number;
   max: number;
 }
@@ -33,6 +39,7 @@ export interface Level {
   categoryLimits: CategoryLimit[];
   requiredCategories: FoodCategory[];
   priceLimit?: PriceLimit;
+  weightLimit?: WeightLimit;
   boxSize: GiftBoxSize;
   reward: {
     packageName: string;
@@ -48,7 +55,7 @@ export interface PlacedItem {
 }
 
 export interface ValidationError {
-  type: 'category_count' | 'required_category' | 'price' | 'grid_full';
+  type: 'category_count' | 'required_category' | 'price' | 'weight' | 'grid_full';
   message: string;
   details?: {
     category?: FoodCategory;
@@ -58,6 +65,9 @@ export interface ValidationError {
     currentPrice?: number;
     minPrice?: number;
     maxPrice?: number;
+    currentWeight?: number;
+    minWeight?: number;
+    maxWeight?: number;
   };
 }
 
@@ -67,6 +77,7 @@ export interface ValidateResponse {
   errors: ValidationError[];
   summary?: {
     totalPrice: number;
+    totalWeight: number;
     categoryCounts: Record<FoodCategory, number>;
   };
   unlockedReward?: Level['reward'];

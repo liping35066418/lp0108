@@ -13,6 +13,7 @@ export const levels: Level[] = [
     ],
     requiredCategories: ['fruit_vegetable', 'meat', 'dry_goods'],
     priceLimit: { min: 100, max: 250 },
+    weightLimit: { min: 1500, max: 3000 },
     boxSize: { rows: 3, cols: 3 },
     reward: {
       packageName: '新春祝福礼盒',
@@ -32,6 +33,7 @@ export const levels: Level[] = [
     ],
     requiredCategories: ['fruit_vegetable', 'meat', 'dry_goods'],
     priceLimit: { min: 300, max: 600 },
+    weightLimit: { min: 2000, max: 5000 },
     boxSize: { rows: 4, cols: 4 },
     reward: {
       packageName: '尊享商务礼盒',
@@ -51,6 +53,7 @@ export const levels: Level[] = [
     ],
     requiredCategories: ['fruit_vegetable', 'meat', 'dry_goods'],
     priceLimit: { min: 150, max: 350 },
+    weightLimit: { min: 2000, max: 4000 },
     boxSize: { rows: 4, cols: 3 },
     reward: {
       packageName: '健康长寿礼盒',
@@ -70,6 +73,7 @@ export const levels: Level[] = [
     ],
     requiredCategories: ['fruit_vegetable', 'meat', 'dry_goods'],
     priceLimit: { min: 400, max: 800 },
+    weightLimit: { min: 3000, max: 6000 },
     boxSize: { rows: 4, cols: 4 },
     reward: {
       packageName: '臻选福运礼盒',

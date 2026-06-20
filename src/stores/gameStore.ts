@@ -184,3 +184,8 @@ export function getTotalPrice(): number {
   const placed = getPlacedFoods();
   return placed.reduce((sum, f) => sum + f.price, 0);
 }
+
+export function getTotalWeight(): number {
+  const placed = getPlacedFoods();
+  return placed.reduce((sum, f) => sum + f.weight, 0);
+}

@@ -1,4 +1,4 @@
-import { useGameStore, getPlacedFoods, getTotalPrice, getCategoryCount
+import { useGameStore, getPlacedFoods, getTotalPrice, getTotalWeight, getCategoryCount
 } from '../stores/gameStore';
 import { Undo2, Trash2, PackageOpen, RotateCcw
 } from 'lucide-react';
@@ -9,6 +9,7 @@ export default function GiftBoxPreview() {
   const {
     currentLevel,
     placedItems,
+    foods,
     undo,
     clearAll,
     historyIndex,
@@ -18,8 +19,18 @@ export default function GiftBoxPreview() {
 
   const placedFoods = getPlacedFoods();
   const totalPrice = getTotalPrice();
+  const totalWeight = getTotalWeight();
 
   if (!currentLevel) return null;
+
+  const { rows, cols } = currentLevel.boxSize;
+
+  const getFoodAtPosition = (row: number, col: number) => {
+    const item = placedItems.find((i) => i.row === row && i.col === col);
+    if (!item) return null;
+    const food = foods.find((f) => f.id === item.foodId);
+    return food ? { ...item, ...food } : null;
+  };
 
   const reward = validationResult?.passed
     ? validationResult.unlockedReward
@@ -48,26 +59,24 @@ export default function GiftBoxPreview() {
         )}
       </div>
 
-      {/* 礼盒包装预览 */}
       <div
-        className={`relative aspect-square rounded-2xl p-4 border-4 shadow-xl overflow-hidden mb-4 ${packageStyle}`}
+        className={`relative rounded-2xl p-4 border-4 shadow-xl overflow-hidden mb-4 ${packageStyle}`}
+        style={{ aspectRatio: `${cols} / ${rows}` }}
       >
-        {/* 丝带装饰 */}
         <div
-          className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-6 bg-gradient-to-r ${ribbonColor} opacity-80 shadow-md`}
+          className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-6 bg-gradient-to-r ${ribbonColor} opacity-60 shadow-md pointer-events-none`}
         />
         <div
-          className={`absolute inset-y-0 left-1/2 -translate-x-1/2 w-6 bg-gradient-to-b ${ribbonColor} opacity-80 shadow-md`}
+          className={`absolute inset-y-0 left-1/2 -translate-x-1/2 w-6 bg-gradient-to-b ${ribbonColor} opacity-60 shadow-md pointer-events-none`}
         />
 
-        {/* 蝴蝶结 */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
           <div className="relative">
             <div
-              className={`w-8 h-8 rounded-full bg-gradient-to-br ${ribbonColor} shadow-lg transform -rotate-12`}
+              className={`w-8 h-8 rounded-full bg-gradient-to-br ${ribbonColor} shadow-lg transform -rotate-12 opacity-90`}
             />
             <div
-              className={`absolute top-0 w-8 h-8 rounded-full bg-gradient-to-br ${ribbonColor} shadow-lg transform rotate-12 opacity-90`}
+              className={`absolute top-0 w-8 h-8 rounded-full bg-gradient-to-br ${ribbonColor} shadow-lg transform rotate-12 opacity-80`}
             />
             <div
               className={`absolute top-1.5 left-1/2 -translate-x-1/2 w-3 h-4 rounded-full bg-gradient-to-b ${ribbonColor} shadow-inner`}
@@ -75,34 +84,47 @@ export default function GiftBoxPreview() {
           </div>
         </div>
 
-        {/* 食材预览缩略图 */}
-        <div className="absolute inset-0 p-6 grid grid-cols-4 grid-rows-4 gap-1 z-0 opacity-70">
-          {Array.from({ length: 16 }).map((_, idx) => {
-            const food = placedFoods[idx];
-            return (
-              <div
-                key={idx}
-                className="flex items-center justify-center"
-              >
-                {food && (
-                  <span className="text-xl drop-shadow-sm filter grayscale-0 opacity-90">
-                    {(food as any).emoji}
-                  </span>
-                )}
-              </div>
-            );
-          })}
+        <div
+          className="relative z-0 w-full h-full"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${cols}, 1fr)`,
+            gridTemplateRows: `repeat(${rows}, 1fr)`,
+            gap: '4px',
+          }}
+        >
+          {Array.from({ length: rows }).map((_, row) =>
+            Array.from({ length: cols }).map((_, col) => {
+              const food = getFoodAtPosition(row, col);
+              return (
+                <div
+                  key={`${row}-${col}`}
+                  className={`rounded-lg border flex items-center justify-center transition-all duration-200 ${
+                    food
+                      ? 'bg-white/80 border-white/60 shadow-sm'
+                      : 'bg-white/20 border-white/30 border-dashed'
+                  }`}
+                >
+                  {food ? (
+                    <span className="text-lg sm:text-xl drop-shadow-sm">
+                      {food.emoji}
+                    </span>
+                  ) : (
+                    <span className="text-white/40 text-xs">◇</span>
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
 
-        {/* 礼盒铭牌 */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full shadow-lg z-20 border border-white">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full shadow-lg z-20 border border-white pointer-events-none">
           <span className="text-sm font-bold text-slate-700">
             {packageName}
           </span>
         </div>
       </div>
 
-      {/* 统计信息 */}
       <div className="space-y-3 mb-4 flex-shrink-0">
         <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
           <div className="flex items-center justify-between mb-2">
@@ -111,7 +133,21 @@ export default function GiftBoxPreview() {
               ¥{totalPrice}
             </span>
           </div>
-          <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-slate-500">⚖️ 总重量</span>
+            <span className="text-lg font-bold bg-gradient-to-r from-blue-500 to-cyan-600 bg-clip-text text-transparent">
+              {totalWeight}g
+            </span>
+          </div>
+          {currentLevel.weightLimit && (
+            <div className="text-xs text-slate-400 flex items-center justify-between">
+              <span>重量范围: {currentLevel.weightLimit.min}g - {currentLevel.weightLimit.max}g</span>
+              <span className={totalWeight < currentLevel.weightLimit.min ? 'text-blue-500 font-medium' : totalWeight > currentLevel.weightLimit.max ? 'text-red-500 font-medium' : 'text-green-500 font-medium'}>
+                {totalWeight < currentLevel.weightLimit.min ? '不足' : totalWeight > currentLevel.weightLimit.max ? '超标' : '达标'}
+              </span>
+            </div>
+          )}
+          <div className="flex items-center justify-between text-xs text-slate-400 mt-1">
             <span>{placedItems.length} 件食材</span>
             <span>{currentLevel.boxSize.rows * currentLevel.boxSize.cols - placedItems.length} 格空位</span>
           </div>
@@ -135,7 +171,6 @@ export default function GiftBoxPreview() {
         </div>
       </div>
 
-      {/* 食材清单 */}
       <div className="flex-1 overflow-hidden flex flex-col min-h-0">
         <div className="text-xs text-slate-500 mb-2 font-medium">
           📝 食材清单 ({placedFoods.length})
@@ -148,26 +183,28 @@ export default function GiftBoxPreview() {
           ) : (
             placedFoods.map((food, idx) => (
               <div
-                key={`${(food as any).id}-${idx}`}
+                key={`${food.id}-${idx}`}
                 className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
               >
-                <span className="text-xl">{(food as any).emoji}</span>
+                <span className="text-xl">{food.emoji}</span>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-slate-700 truncate">
-                    {(food as any).name}
+                    {food.name}
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    {categoryNames[(food as any).category]}
+                    {categoryNames[food.category]}
                   </div>
                 </div>
-                <span className="text-sm font-bold text-amber-600">¥{(food as any).price}</span>
+                <div className="text-right flex-shrink-0">
+                  <div className="text-sm font-bold text-amber-600">¥{food.price}</div>
+                  <div className="text-[10px] text-blue-500">{food.weight}g</div>
+                </div>
               </div>
             ))
           )}
         </div>
       </div>
 
-      {/* 操作按钮 */}
       <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
         <button
           onClick={undo}

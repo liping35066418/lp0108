@@ -88,6 +88,9 @@ export default function FoodPanel() {
                 <div className="mt-2 inline-block px-2 py-0.5 bg-white/80 rounded-full text-xs font-bold text-amber-600">
                   ¥{food.price}
                 </div>
+                <div className="mt-1 inline-block px-2 py-0.5 bg-white/80 rounded-full text-[10px] font-medium text-blue-500 ml-1">
+                  {food.weight}g
+                </div>
               </div>
               <div
                 className={`absolute top-1 right-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-gradient-to-r ${categoryColors[food.category]} text-white opacity-0 group-hover:opacity-100 transition-opacity`}

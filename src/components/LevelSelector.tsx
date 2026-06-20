@@ -117,6 +117,15 @@ export default function LevelSelector() {
             </div>
           )}
 
+          {currentLevel.weightLimit && (
+            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-3 border border-blue-200 flex items-center justify-between">
+              <span className="text-sm text-blue-700 font-medium">⚖️ 重量限制</span>
+              <span className="text-lg font-bold text-blue-800">
+                {currentLevel.weightLimit.min}g - {currentLevel.weightLimit.max}g
+              </span>
+            </div>
+          )}
+
           <div className="flex items-center justify-between text-sm text-slate-500 pt-1">
             <span>🎁 礼盒容量：{currentLevel.boxSize.rows} × {currentLevel.boxSize.cols} = {currentLevel.boxSize.rows * currentLevel.boxSize.cols}格</span>
             <span>必备品类：{currentLevel.requiredCategories.map(c => categoryNames[c]).join('、')}</span>

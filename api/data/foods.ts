@@ -6,6 +6,7 @@ export const foods: FoodItem[] = [
     name: '苹果',
     category: 'fruit_vegetable',
     price: 15,
+    weight: 500,
     emoji: '🍎',
     description: '红富士苹果，脆甜多汁'
   },
@@ -14,6 +15,7 @@ export const foods: FoodItem[] = [
     name: '橙子',
     category: 'fruit_vegetable',
     price: 12,
+    weight: 450,
     emoji: '🍊',
     description: '赣南脐橙，维C丰富'
   },
@@ -22,6 +24,7 @@ export const foods: FoodItem[] = [
     name: '葡萄',
     category: 'fruit_vegetable',
     price: 25,
+    weight: 400,
     emoji: '🍇',
     description: '阳光玫瑰葡萄'
   },
@@ -30,6 +33,7 @@ export const foods: FoodItem[] = [
     name: '草莓',
     category: 'fruit_vegetable',
     price: 35,
+    weight: 300,
     emoji: '🍓',
     description: '丹东99草莓'
   },
@@ -38,6 +42,7 @@ export const foods: FoodItem[] = [
     name: '番茄',
     category: 'fruit_vegetable',
     price: 8,
+    weight: 350,
     emoji: '🍅',
     description: '普罗旺斯番茄'
   },
@@ -46,6 +51,7 @@ export const foods: FoodItem[] = [
     name: '黄瓜',
     category: 'fruit_vegetable',
     price: 6,
+    weight: 250,
     emoji: '🥒',
     description: '水果小黄瓜'
   },
@@ -54,6 +60,7 @@ export const foods: FoodItem[] = [
     name: '胡萝卜',
     category: 'fruit_vegetable',
     price: 5,
+    weight: 300,
     emoji: '🥕',
     description: '有机胡萝卜'
   },
@@ -62,6 +69,7 @@ export const foods: FoodItem[] = [
     name: '玉米',
     category: 'fruit_vegetable',
     price: 7,
+    weight: 400,
     emoji: '🌽',
     description: '东北甜玉米'
   },
@@ -70,6 +78,7 @@ export const foods: FoodItem[] = [
     name: '牛肉',
     category: 'meat',
     price: 68,
+    weight: 500,
     emoji: '🥩',
     description: '和牛雪花牛排'
   },
@@ -78,6 +87,7 @@ export const foods: FoodItem[] = [
     name: '猪肉',
     category: 'meat',
     price: 35,
+    weight: 450,
     emoji: '🥓',
     description: '散养黑猪五花'
   },
@@ -86,6 +96,7 @@ export const foods: FoodItem[] = [
     name: '鸡肉',
     category: 'meat',
     price: 28,
+    weight: 600,
     emoji: '🍗',
     description: '农家散养土鸡'
   },
@@ -94,6 +105,7 @@ export const foods: FoodItem[] = [
     name: '三文鱼',
     category: 'meat',
     price: 58,
+    weight: 400,
     emoji: '🐟',
     description: '挪威进口三文鱼'
   },
@@ -102,6 +114,7 @@ export const foods: FoodItem[] = [
     name: '鲜虾',
     category: 'meat',
     price: 45,
+    weight: 350,
     emoji: '🦐',
     description: '厄瓜多尔白虾'
   },
@@ -110,6 +123,7 @@ export const foods: FoodItem[] = [
     name: '香肠',
     category: 'meat',
     price: 32,
+    weight: 300,
     emoji: '🌭',
     description: '黑猪手工香肠'
   },
@@ -118,6 +132,7 @@ export const foods: FoodItem[] = [
     name: '烤鸭',
     category: 'meat',
     price: 88,
+    weight: 1200,
     emoji: '🦆',
     description: '北京烤鸭'
   },
@@ -126,6 +141,7 @@ export const foods: FoodItem[] = [
     name: '松茸',
     category: 'dry_goods',
     price: 120,
+    weight: 100,
     emoji: '🍄',
     description: '云南野生松茸'
   },
@@ -134,6 +150,7 @@ export const foods: FoodItem[] = [
     name: '木耳',
     category: 'dry_goods',
     price: 45,
+    weight: 150,
     emoji: '🫶',
     description: '东北黑木耳'
   },
@@ -142,6 +159,7 @@ export const foods: FoodItem[] = [
     name: '手工面',
     category: 'dry_goods',
     price: 18,
+    weight: 500,
     emoji: '🍜',
     description: '手工拉面'
   },
@@ -150,6 +168,7 @@ export const foods: FoodItem[] = [
     name: '五常大米',
     category: 'dry_goods',
     price: 25,
+    weight: 2500,
     emoji: '🍚',
     description: '东北五常大米'
   },
@@ -158,6 +177,7 @@ export const foods: FoodItem[] = [
     name: '龙井茶',
     category: 'dry_goods',
     price: 88,
+    weight: 200,
     emoji: '🍵',
     description: '西湖龙井明前茶'
   },
@@ -166,6 +186,7 @@ export const foods: FoodItem[] = [
     name: '蜂蜜',
     category: 'dry_goods',
     price: 55,
+    weight: 500,
     emoji: '🍯',
     description: '农家土蜂蜜'
   },
@@ -174,6 +195,7 @@ export const foods: FoodItem[] = [
     name: '坚果礼盒',
     category: 'dry_goods',
     price: 68,
+    weight: 450,
     emoji: '🥜',
     description: '每日坚果混合装'
   },
@@ -182,6 +204,7 @@ export const foods: FoodItem[] = [
     name: '红枣',
     category: 'dry_goods',
     price: 38,
+    weight: 300,
     emoji: '🌰',
     description: '新疆和田大枣'
   }

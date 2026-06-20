@@ -1,4 +1,4 @@
-import { useGameStore, getTotalPrice, getCategoryCount } from '../stores/gameStore';
+import { useGameStore, getTotalPrice, getTotalWeight, getCategoryCount } from '../stores/gameStore';
 import {
   categoryNames,
   categoryColors,
@@ -37,6 +37,7 @@ export default function ValidationPanel() {
   } = useGameStore();
 
   const totalPrice = getTotalPrice();
+  const totalWeight = getTotalWeight();
 
   if (!currentLevel) return null;
 
@@ -189,6 +190,75 @@ export default function ValidationPanel() {
               </div>
             );
           })()}
+
+          {currentLevel.weightLimit && (() => {
+            const { min, max } = currentLevel.weightLimit;
+            const ratio = (totalWeight - min) / (max - min);
+            const clampedRatio = Math.max(0, Math.min(1, ratio)) * 100;
+
+            let weightStatus: LimitStatus = 'warning';
+            if (totalWeight >= min && totalWeight <= max) weightStatus = 'ok';
+            else if (totalWeight === 0) weightStatus = 'empty';
+            else weightStatus = 'error';
+
+            return (
+              <div
+                className={`rounded-lg p-3 border transition-all ${
+                  weightStatus === 'ok'
+                    ? 'bg-green-50 border-green-200'
+                    : weightStatus === 'error'
+                    ? 'bg-red-50 border-red-200'
+                    : 'bg-slate-50 border-slate-200'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white text-lg">
+                      ⚖️
+                    </div>
+                    <span className="font-medium text-blue-700">礼盒总重量</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    {weightStatus === 'ok' && (
+                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    )}
+                    {weightStatus === 'error' && (
+                      <XCircle className="w-5 h-5 text-red-500" />
+                    )}
+                    {weightStatus === 'empty' && (
+                      <CircleDashed className="w-5 h-5 text-slate-400" />
+                    )}
+                    <span
+                      className={`font-bold text-sm ${
+                        weightStatus === 'ok'
+                          ? 'text-green-600'
+                          : weightStatus === 'error'
+                          ? 'text-red-600'
+                          : 'text-slate-600'
+                      }`}
+                    >
+                      {totalWeight}g
+                    </span>
+                  </div>
+                </div>
+                <div className="text-xs text-slate-500 mb-2 text-right">
+                  范围: {min}g - {max}g
+                  {totalWeight < min && (
+                    <span className="ml-2 text-blue-600 font-medium">重量不足</span>
+                  )}
+                  {totalWeight > max && (
+                    <span className="ml-2 text-red-600 font-medium">重量超标</span>
+                  )}
+                </div>
+                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-blue-400 to-cyan-500 transition-all duration-300"
+                    style={{ width: `${clampedRatio}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
 
@@ -226,7 +296,7 @@ export default function ValidationPanel() {
                 >
                   共 {validationResult.summary.categoryCounts.fruit_vegetable +
                     validationResult.summary.categoryCounts.meat +
-                    validationResult.summary.categoryCounts.dry_goods} 件食材，总价 ¥{validationResult.summary.totalPrice}
+                    validationResult.summary.categoryCounts.dry_goods} 件食材，总价 ¥{validationResult.summary.totalPrice}，总重量 {validationResult.summary.totalWeight}g
                 </div>
               )}
             </div>

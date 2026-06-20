@@ -116,12 +116,13 @@ export default function SuccessModal() {
 
             {/* 统计信息 */}
             {validationResult.summary && (
-              <div className="mb-6 grid grid-cols-4 gap-2">
+              <div className="mb-6 grid grid-cols-5 gap-2">
                 {[
                   { label: '果蔬', value: validationResult.summary.categoryCounts.fruit_vegetable, emoji: '🥬' },
                   { label: '鲜肉', value: validationResult.summary.categoryCounts.meat, emoji: '🥩' },
                   { label: '干货', value: validationResult.summary.categoryCounts.dry_goods, emoji: '🍄' },
                   { label: '总价', value: `¥${validationResult.summary.totalPrice}`, emoji: '💰' },
+                  { label: '总重量', value: `${validationResult.summary.totalWeight}g`, emoji: '⚖️' },
                 ].map((item) => (
                   <div
                     key={item.label}

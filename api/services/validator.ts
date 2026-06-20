@@ -31,10 +31,18 @@ function calculateTotalPrice(placedItems: PlacedItem[]): number {
   }, 0);
 }
 
+function calculateTotalWeight(placedItems: PlacedItem[]): number {
+  return placedItems.reduce((total, item) => {
+    const food = getFoodById(item.foodId);
+    return total + (food?.weight || 0);
+  }, 0);
+}
+
 export function validateGiftBox(level: Level, placedItems: PlacedItem[]): ValidateResponse {
   const errors: ValidationError[] = [];
   const categoryCounts = calculateCategoryCounts(placedItems);
   const totalPrice = calculateTotalPrice(placedItems);
+  const totalWeight = calculateTotalWeight(placedItems);
 
   for (const limit of level.categoryLimits) {
     const count = categoryCounts[limit.category];
@@ -103,6 +111,32 @@ export function validateGiftBox(level: Level, placedItems: PlacedItem[]): Valida
     }
   }
 
+  if (level.weightLimit) {
+    const { min, max } = level.weightLimit;
+    if (totalWeight < min) {
+      errors.push({
+        type: 'weight',
+        message: `礼盒总重量不足：当前${totalWeight}g，最低要求${min}g`,
+        details: {
+          currentWeight: totalWeight,
+          minWeight: min,
+          maxWeight: max
+        }
+      });
+    }
+    if (totalWeight > max) {
+      errors.push({
+        type: 'weight',
+        message: `礼盒总重量超标：当前${totalWeight}g，最高限额${max}g`,
+        details: {
+          currentWeight: totalWeight,
+          minWeight: min,
+          maxWeight: max
+        }
+      });
+    }
+  }
+
   const passed = errors.length === 0;
 
   return {
@@ -111,6 +145,7 @@ export function validateGiftBox(level: Level, placedItems: PlacedItem[]): Valida
     errors,
     summary: {
       totalPrice,
+      totalWeight,
       categoryCounts
     },
     unlockedReward: passed ? level.reward : undefined
