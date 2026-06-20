@@ -25,6 +25,7 @@ interface GameState {
   placeItem: (foodId: string, row: number, col: number) => void;
   removeItem: (row: number, col: number) => void;
   undo: () => void;
+  redo: () => void;
   clearAll: () => void;
   validate: () => Promise<void>;
   clearValidation: () => void;
@@ -102,6 +103,18 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { history, historyIndex } = get();
     if (historyIndex > 0) {
       const newIndex = historyIndex - 1;
+      set({
+        placedItems: history[newIndex].placedItems,
+        historyIndex: newIndex,
+        validationResult: null,
+      });
+    }
+  },
+
+  redo: () => {
+    const { history, historyIndex } = get();
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1;
       set({
         placedItems: history[newIndex].placedItems,
         historyIndex: newIndex,
@@ -188,4 +201,16 @@ export function getTotalPrice(): number {
 export function getTotalWeight(): number {
   const placed = getPlacedFoods();
   return placed.reduce((sum, f) => sum + f.weight, 0);
+}
+
+export function getPlacedCounts(): { total: number; byCategory: Record<FoodCategory, number> } {
+  const placed = getPlacedFoods();
+  return {
+    total: placed.length,
+    byCategory: {
+      fruit_vegetable: placed.filter((f) => f.category === 'fruit_vegetable').length,
+      meat: placed.filter((f) => f.category === 'meat').length,
+      dry_goods: placed.filter((f) => f.category === 'dry_goods').length,
+    },
+  };
 }

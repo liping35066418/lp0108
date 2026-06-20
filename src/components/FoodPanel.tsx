@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useGameStore, getPlacedCounts } from '../stores/gameStore';
 import {
   categoryNames,
   categoryColors,
@@ -12,12 +12,14 @@ import {
 const categories: FoodCategory[] = ['fruit_vegetable', 'meat', 'dry_goods'];
 
 export default function FoodPanel() {
-  const { foods } = useGameStore();
+  const { foods, placedItems } = useGameStore();
   const [activeCategory, setActiveCategory] = useState<FoodCategory | 'all'>('all');
   const [draggedFood, setDraggedFood] = useState<FoodItem | null>(null);
 
   const filteredFoods =
     activeCategory === 'all' ? foods : foods.filter((f) => f.category === activeCategory);
+
+  const placedCounts = getPlacedCounts();
 
   const handleDragStart = (e: React.DragEvent, food: FoodItem) => {
     e.dataTransfer.setData('foodId', food.id);
@@ -42,10 +44,10 @@ export default function FoodPanel() {
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            全部 ({foods.length})
+            全部 ({placedCounts.total})
           </button>
           {categories.map((cat) => {
-            const count = foods.filter((f) => f.category === cat).length;
+            const count = placedCounts.byCategory[cat];
             return (
               <button
                 key={cat}

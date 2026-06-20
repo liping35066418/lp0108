@@ -1,4 +1,4 @@
-import { useGameStore, getTotalPrice, getTotalWeight, getCategoryCount } from '../stores/gameStore';
+import { useGameStore, getTotalPrice, getTotalWeight, getCategoryCount, getPlacedCounts } from '../stores/gameStore';
 import {
   categoryNames,
   categoryColors,
@@ -30,6 +30,7 @@ const categories: FoodCategory[] = ['fruit_vegetable', 'meat', 'dry_goods'];
 export default function ValidationPanel() {
   const {
     currentLevel,
+    placedItems,
     validationResult,
     isLoading,
     validate,
@@ -38,6 +39,7 @@ export default function ValidationPanel() {
 
   const totalPrice = getTotalPrice();
   const totalWeight = getTotalWeight();
+  const placedCounts = getPlacedCounts();
 
   if (!currentLevel) return null;
 
@@ -58,7 +60,7 @@ export default function ValidationPanel() {
 
         <div className="space-y-3">
           {currentLevel.categoryLimits.map((limit) => {
-            const current = getCategoryCount(limit.category);
+            const current = placedCounts.byCategory[limit.category];
             const required = currentLevel.requiredCategories.includes(limit.category);
             const status = getLimitStatus({ limit, current, required });
 
